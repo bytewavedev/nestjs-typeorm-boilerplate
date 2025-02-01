@@ -1,6 +1,8 @@
-// import { ContextProvider } from 'src/providers/context.provider';
+import { ContextProvider } from 'src/providers/context.provider';
 import { STATUS } from 'src/utils/constants';
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   PrimaryGeneratedColumn,
@@ -19,33 +21,33 @@ export class BaseEntity {
 
   @Column({
     name: 'status',
-    type: 'enum',
-    enum: STATUS,
+    type: 'varchar',
+    length: 10,
     default: STATUS.ACTIVE,
   })
-  status: STATUS;
+  status: string;
 
   @Column({ name: 'created_by', type: 'bigint', nullable: true })
   createdBy: number;
   @Column({ name: 'updated_by', type: 'bigint', nullable: true })
   updatedBy: number;
-  //   @BeforeInsert()
-  //   setCreatedBy() {
-  //     const user = ContextProvider.getAuthUser();
-  //     if (user) {
-  //       this.createdBy = user.id;
-  //     }
-  //   }
+  @BeforeInsert()
+  setCreatedBy() {
+    const user = ContextProvider.getAuthUser();
+    if (user) {
+      this.createdBy = user.id;
+    }
+  }
 
-  //   @BeforeUpdate()
-  //   updateDates() {
-  //     this.updatedAt = new Date();
-  //   }
-  //   @BeforeUpdate()
-  //   setUpdatedBy() {
-  //     const user = ContextProvider.getAuthUser();
-  //     if (user) {
-  //       this.updatedBy = user.id;
-  //     }
-  //   }
+  @BeforeUpdate()
+  updateDates() {
+    this.updatedAt = new Date();
+  }
+  @BeforeUpdate()
+  setUpdatedBy() {
+    const user = ContextProvider.getAuthUser();
+    if (user) {
+      this.updatedBy = user.id;
+    }
+  }
 }
