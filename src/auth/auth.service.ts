@@ -58,7 +58,7 @@ export class AuthService {
   }
   async createAccessToken(data: { role: string; userId: number }) {
     return new TokenPayloadDto({
-      expiresIn: this.configService.get<number>('JWT_EXPIRATION_TIME'),
+      expiresIn: this.configService.get<string>('JWT_EXPIRATION_TIME'),
       accessToken: await this.jwtService.signAsync({
         userId: data.userId,
         type: TokenType.ACCESS_TOKEN,
